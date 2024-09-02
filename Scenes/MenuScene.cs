@@ -7,7 +7,6 @@ public class MenuScene : SceneBase
 {
     public MenuScene(SpriteBatch spriteBatch) : base(spriteBatch)
     {
-        world = new WorldBuilder().Build();
     }
     public override void Initialize()
     {
