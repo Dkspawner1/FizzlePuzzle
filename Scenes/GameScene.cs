@@ -8,7 +8,6 @@ public class GameScene : SceneBase
 {
     public GameScene(SpriteBatch spriteBatch) : base(spriteBatch)
     {
-        world = new WorldBuilder().Build();
 
     }
     public override void Initialize()
