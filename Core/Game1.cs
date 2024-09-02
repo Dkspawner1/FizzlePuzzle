@@ -18,10 +18,11 @@ public class Game1 : Game
 
     protected override void Initialize()
     {
+        ContentLoaderSingleton.Initialize(Content);
         SpriteBatchSingleton.Initialize(GraphicsDevice);
+        
+        sceneManager = new SceneManager();
 
-
-        sceneManager = new SceneManager(SpriteBatchSingleton.Instance.SpriteBatch);
         sceneManager.Initialize();
 
         base.Initialize();
@@ -29,9 +30,6 @@ public class Game1 : Game
 
     protected override void LoadContent()
     {
-
-
-        sceneManager.LoadContent(Content);
 
     }
 
