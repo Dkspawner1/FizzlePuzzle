@@ -11,6 +11,7 @@ public class PuzzleComponent
     public Texture2DRegion[,] IndividualRects;
     public int Padding { get; }
     public float Scale { get; }
+    public List<Entity> PuzzlePieces { get; } = new List<Entity>();
     public PuzzleComponent(Texture2D texture, int rows, int cols, int padding, float scale)
     {
         Sprite = new Sprite(texture);

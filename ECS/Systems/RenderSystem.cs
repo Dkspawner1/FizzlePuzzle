@@ -9,21 +9,23 @@ namespace FizzlePuzzle.ECS.Systems;
 public class RenderSystem : EntityDrawSystem
 {
     private ComponentMapper<PuzzleComponent> puzzleComponentMapper;
-    private GraphicsDevice graphicsDevice;
+    private ComponentMapper<PuzzlePieceComponent> pieceComponentMapper;
 
-    public RenderSystem(GraphicsDevice graphicsDevice) : base(Aspect.All(typeof(PuzzleComponent)))
+    public RenderSystem() : base(Aspect.All(typeof(PuzzleComponent)))
     {
-        this.graphicsDevice = graphicsDevice;
     }
 
     public override void Initialize(IComponentMapperService mapperService)
     {
         puzzleComponentMapper = mapperService.GetMapper<PuzzleComponent>();
+        pieceComponentMapper = mapperService.GetMapper<PuzzlePieceComponent>();
     }
 
     public override void Draw(GameTime gameTime)
     {
         var spriteBatch = SpriteBatchSingleton.Instance.SpriteBatch;
+        var graphicsDevice = spriteBatch.GraphicsDevice;
+
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp);
 
         foreach (var entity in ActiveEntities)
@@ -35,38 +37,26 @@ public class RenderSystem : EntityDrawSystem
             int rows = rects.GetLength(0);
             int cols = rects.GetLength(1);
 
-            // Calculate total puzzle size
-            float totalWidth = (cols * rects[0, 0].Width * scale) + ((cols - 1) * puzzle.Padding);
-            float totalHeight = (rows * rects[0, 0].Height * scale) + ((rows - 1) * puzzle.Padding);
+            // Calculate total puzzle size and center position
+            // ... (keep this part the same)
 
-            // Calculate center position
-            Vector2 centerPosition = new Vector2(
-                (graphicsDevice.Viewport.Width - totalWidth) / 2,
-                (graphicsDevice.Viewport.Height - totalHeight) / 2
-            );
-
-            for (int y = 0; y < rows; y++)
+            for (int i = 0; i < puzzle.PuzzlePieces.Count; i++)
             {
-                for (int x = 0; x < cols; x++)
-                {
-                    var piece = rects[y, x];
-                    Vector2 position = new Vector2(
-                        centerPosition.X + x * (piece.Width * scale + puzzle.Padding),
-                        centerPosition.Y + y * (piece.Height * scale + puzzle.Padding)
-                    );
+                var pieceEntity = puzzle.PuzzlePieces[i];
+                var pieceComponent = pieceComponentMapper.Get(pieceEntity);
+                var piece = rects[i / cols, i % cols];
 
-                    spriteBatch.Draw(
-                        piece.Texture,
-                        position,
-                        piece.Bounds,
-                        Color.White,
-                        0f,
-                        Vector2.Zero,
-                        scale,
-                        SpriteEffects.None,
-                        0f
-                    );
-                }
+                spriteBatch.Draw(
+                    piece.Texture,
+                    pieceComponent.CurrentPosition,
+                    piece.Bounds,
+                    Color.White,
+                    0f,
+                    Vector2.Zero,
+                    scale,
+                    SpriteEffects.None,
+                    0f
+                );
             }
         }
 
