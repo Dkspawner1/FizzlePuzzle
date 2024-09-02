@@ -10,14 +10,17 @@ namespace FizzlePuzzle.Scenes;
 public abstract class SceneBase
 {
     protected World world;
-    protected SceneBase(SpriteBatch spriteBatch, [Optional] IEnumerable<ISystem> systems)
+
+    protected SceneBase([Optional] IEnumerable<ISystem> systems)
     {
         world = (systems ?? Enumerable.Empty<ISystem>())
         .Aggregate(new WorldBuilder(), (builder, system) => builder.AddSystem(system))
         .Build();
+
     }
     public abstract void Initialize();
-    public abstract void LoadContent(ContentManager Content);
+    public abstract void LoadContent();
+    public abstract void UnloadContent();
     public virtual void Update(GameTime gameTime) => world.Update(gameTime);
     public virtual void Draw(GameTime gameTime) => world.Draw(gameTime);
 }

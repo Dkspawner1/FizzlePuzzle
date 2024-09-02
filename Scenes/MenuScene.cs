@@ -5,16 +5,19 @@ namespace FizzlePuzzle.Scenes;
 
 public class MenuScene : SceneBase
 {
-    public MenuScene(SpriteBatch spriteBatch) : base(spriteBatch)
+    public MenuScene() : base()
     {
     }
     public override void Initialize()
     {
     }
 
-    public override void LoadContent(ContentManager Content)
+    public override void LoadContent()
     {
 
+    }
+    public override void UnloadContent()
+    {
     }
     public override void Update(GameTime gameTime)
     {
@@ -22,6 +25,10 @@ public class MenuScene : SceneBase
     }
     public override void Draw(GameTime gameTime)
     {
+        
+        
         base.Draw(gameTime);
     }
+
+
 }

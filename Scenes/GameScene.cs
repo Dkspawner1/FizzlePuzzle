@@ -1,12 +1,13 @@
-﻿
-using Microsoft.Xna.Framework.Content;
-using MonoGame.Extended.ECS;
+﻿using FizzlePuzzle.ECS.Components;
+using FizzlePuzzle.ECS.Entities;
+using FizzlePuzzle.ECS.Systems;
+using MonoGame.Extended.Graphics;
 
 namespace FizzlePuzzle.Scenes;
 
 public class GameScene : SceneBase
 {
-    public GameScene(SpriteBatch spriteBatch) : base(spriteBatch)
+    public GameScene() : base(new[] { new RenderSystem(SpriteBatchSingleton.Instance.SpriteBatch.GraphicsDevice) })
     {
 
     }
@@ -14,9 +15,16 @@ public class GameScene : SceneBase
     {
     }
 
-    public override void LoadContent(ContentManager Content)
+    public override void LoadContent()
     {
 
+        var puzzleComponent = new PuzzleComponent(ContentLoaderSingleton.Instance.Load<Texture2D>("Textures/fizzle"), 5, 5, 3, 1f);
+        var puzzle = new Puzzle(world, puzzleComponent);
+
+    }
+    public override void UnloadContent()
+    {
+        ContentLoaderSingleton.Instance.UnloadAll();
     }
     public override void Update(GameTime gameTime)
     {
@@ -25,6 +33,9 @@ public class GameScene : SceneBase
     public override void Draw(GameTime gameTime)
     {
 
+
         base.Draw(gameTime);
     }
+
+
 }
