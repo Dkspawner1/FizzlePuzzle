@@ -1,5 +1,4 @@
-﻿using Microsoft.Xna.Framework.Content;
-using MonoGame.Extended.ECS;
+﻿using MonoGame.Extended.ECS;
 using MonoGame.Extended.ECS.Systems;
 using System.Collections.Generic;
 using System.Linq;

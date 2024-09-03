@@ -2,5 +2,5 @@
 
 public interface ISpriteBatchSingleton
 {
-     SpriteBatch SpriteBatch { get; }
+    SpriteBatch SpriteBatch { get; }
 }

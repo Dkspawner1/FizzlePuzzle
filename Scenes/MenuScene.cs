@@ -1,7 +1,4 @@
-﻿using Microsoft.Xna.Framework.Content;
-using MonoGame.Extended.ECS;
-
-namespace FizzlePuzzle.Scenes;
+﻿namespace FizzlePuzzle.Scenes;
 
 public class MenuScene : SceneBase
 {
@@ -25,8 +22,8 @@ public class MenuScene : SceneBase
     }
     public override void Draw(GameTime gameTime)
     {
-        
-        
+
+
         base.Draw(gameTime);
     }
 
