@@ -1,18 +1,22 @@
-﻿
-namespace FizzlePuzzle.ECS.Components;
+﻿using Microsoft.Xna.Framework;
 
-public class PuzzlePieceComponent
+namespace FizzlePuzzle.ECS.Components
 {
-    public Vector2 OriginalPosition { get; set; }
-    public Vector2 CurrentPosition { get; set; }
-    public Rectangle Bounds { get; set; }
-    public bool IsSelected { get; set; }
-
-    public PuzzlePieceComponent(Vector2 position, Rectangle bounds)
+    public class PuzzlePieceComponent
     {
-        OriginalPosition = position;
-        CurrentPosition = position;
-        Bounds = bounds;
-        IsSelected = false;
+        public Vector2 OriginalPosition { get; set; }
+        public Vector2 CurrentPosition { get; set; }
+        public Rectangle Bounds { get; set; }
+        public bool IsSelected { get; set; }
+        public float BaseDepth { get; set; }
+
+        public PuzzlePieceComponent(Vector2 position, Rectangle bounds, float baseDepth)
+        {
+            OriginalPosition = position;
+            CurrentPosition = position;
+            Bounds = bounds;
+            IsSelected = false;
+            BaseDepth = baseDepth;
+        }
     }
 }

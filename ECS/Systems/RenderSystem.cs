@@ -1,65 +1,62 @@
 ﻿using FizzlePuzzle.ECS.Components;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.ECS;
 using MonoGame.Extended.ECS.Systems;
-using MonoGame.Extended.Graphics;
 
-namespace FizzlePuzzle.ECS.Systems;
-
-public class RenderSystem : EntityDrawSystem
+namespace FizzlePuzzle.ECS.Systems
 {
-    private ComponentMapper<PuzzleComponent> puzzleComponentMapper;
-    private ComponentMapper<PuzzlePieceComponent> pieceComponentMapper;
-
-    public RenderSystem() : base(Aspect.All(typeof(PuzzleComponent)))
+    public class RenderSystem : EntityDrawSystem
     {
-    }
+        private ComponentMapper<PuzzleData> puzzleDataMapper;
+        private ComponentMapper<PuzzlePieceComponent> pieceComponentMapper;
 
-    public override void Initialize(IComponentMapperService mapperService)
-    {
-        puzzleComponentMapper = mapperService.GetMapper<PuzzleComponent>();
-        pieceComponentMapper = mapperService.GetMapper<PuzzlePieceComponent>();
-    }
-
-    public override void Draw(GameTime gameTime)
-    {
-        var spriteBatch = SpriteBatchSingleton.Instance.SpriteBatch;
-        var graphicsDevice = spriteBatch.GraphicsDevice;
-
-        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp);
-
-        foreach (var entity in ActiveEntities)
+        public RenderSystem() : base(Aspect.All(typeof(PuzzleData)))
         {
-            var puzzle = puzzleComponentMapper.Get(entity);
-            var rects = puzzle.IndividualRects;
-            float scale = puzzle.Scale;
-
-            int rows = rects.GetLength(0);
-            int cols = rects.GetLength(1);
-
-            // Calculate total puzzle size and center position
-            // ... (keep this part the same)
-
-            for (int i = 0; i < puzzle.PuzzlePieces.Count; i++)
-            {
-                var pieceEntity = puzzle.PuzzlePieces[i];
-                var pieceComponent = pieceComponentMapper.Get(pieceEntity);
-                var piece = rects[i / cols, i % cols];
-
-                spriteBatch.Draw(
-                    piece.Texture,
-                    pieceComponent.CurrentPosition,
-                    piece.Bounds,
-                    Color.White,
-                    0f,
-                    Vector2.Zero,
-                    scale,
-                    SpriteEffects.None,
-                    0f
-                );
-            }
         }
 
-        spriteBatch.End();
+        public override void Initialize(IComponentMapperService mapperService)
+        {
+            puzzleDataMapper = mapperService.GetMapper<PuzzleData>();
+            pieceComponentMapper = mapperService.GetMapper<PuzzlePieceComponent>();
+        }
+
+        public override void Draw(GameTime gameTime)
+        {
+            var spriteBatch = SpriteBatchSingleton.Instance.SpriteBatch;
+            var graphicsDevice = spriteBatch.GraphicsDevice;
+
+            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp);
+
+            foreach (var puzzleEntity in ActiveEntities)
+            {
+                var puzzleData = puzzleDataMapper.Get(puzzleEntity);
+                var rects = puzzleData.IndividualRects;
+                float scale = puzzleData.Scale;
+
+                for (int i = 0; i < puzzleData.PuzzlePieces.Count; i++)
+                {
+                    var pieceEntity = puzzleData.PuzzlePieces[i];
+                    var pieceComponent = pieceComponentMapper.Get(pieceEntity);
+                    var piece = rects[i / rects.GetLength(1), i % rects.GetLength(1)];
+
+                    float depth = pieceComponent.IsSelected ? 0f : pieceComponent.BaseDepth;
+
+                    spriteBatch.Draw(
+                        piece.Texture,
+                        pieceComponent.CurrentPosition,
+                        piece.Bounds,
+                        Color.White,
+                        0f,
+                        Vector2.Zero,
+                        scale,
+                        SpriteEffects.None,
+                        depth
+                    );
+                }
+            }
+
+            spriteBatch.End();
+        }
     }
 }

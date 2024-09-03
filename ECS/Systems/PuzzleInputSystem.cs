@@ -1,5 +1,4 @@
-﻿
-using FizzlePuzzle.ECS.Components;
+﻿using FizzlePuzzle.ECS.Components;
 using MonoGame.Extended.ECS;
 using MonoGame.Extended.ECS.Systems;
 
@@ -10,6 +9,7 @@ public class PuzzleInputSystem : EntityUpdateSystem
 
     private ComponentMapper<PuzzlePieceComponent> pieceMapper;
     private MouseState previousMouseState;
+    private Vector2 dragOffset;
 
     public PuzzleInputSystem() : base(Aspect.All(typeof(PuzzlePieceComponent)))
     {
@@ -50,6 +50,7 @@ public class PuzzleInputSystem : EntityUpdateSystem
             if (piece.Bounds.Contains(mousePosition))
             {
                 piece.IsSelected = true;
+                dragOffset = piece.CurrentPosition - mousePosition;
                 break;
             }
         }
@@ -61,8 +62,13 @@ public class PuzzleInputSystem : EntityUpdateSystem
             var piece = pieceMapper.Get(entity);
             if (piece.IsSelected)
             {
-                piece.CurrentPosition = mousePosition - new Vector2(piece.Bounds.Width / 2, piece.Bounds.Height / 2);
-                piece.Bounds = new Rectangle((int)piece.CurrentPosition.X, (int)piece.CurrentPosition.Y, piece.Bounds.Width, piece.Bounds.Height);
+                piece.CurrentPosition = mousePosition + dragOffset;
+                piece.Bounds = new Rectangle(
+                    (int)piece.CurrentPosition.X,
+                    (int)piece.CurrentPosition.Y,
+                    piece.Bounds.Width,
+                    piece.Bounds.Height
+                );
             }
         }
     }

@@ -24,7 +24,7 @@ public class SceneManager
     {
         foreach (var scene in scenes.Values.Where(scene => scene is not null))
             scene.Initialize();
-        
+
     }
 
     public void AddScene(SCENES sceneName, SceneBase scene) => scenes[sceneName] = scene;

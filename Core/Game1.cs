@@ -20,7 +20,7 @@ public class Game1 : Game
     {
         ContentLoaderSingleton.Initialize(Content);
         SpriteBatchSingleton.Initialize(GraphicsDevice);
-        
+
         sceneManager = new SceneManager();
 
         sceneManager.Initialize();

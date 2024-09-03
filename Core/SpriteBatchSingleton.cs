@@ -37,7 +37,7 @@ public class SpriteBatchSingleton : ISpriteBatchSingleton
                 instance = new SpriteBatchSingleton(graphics);
             }
         }
-    
+
     }
 
 }
